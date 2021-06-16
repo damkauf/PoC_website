@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html>
+  	<head>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+        <title>CRM - POC Nuance MIX</title>
+        <!-- add icon link -->
+        <link rel = "icon" href = "/images/Belltech-Icono.png" type = "image/x-icon">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <!-- Font Awesome Icons -->
+        <script src="https://kit.fontawesome.com/586333741f.js" crossorigin="anonymous"></script>
+
+        <script type="text/javascript">
+
+            function ejecutaReporteCliente(){
+
+                //document.getElementById('spinner-carga-cuenta').style.display = 'block';
+                $("#body-resultados-reporte-cliente").empty();
+                $("#body-resultados-reporte-cuenta").empty();
+                $("#body-resultados-reporte-servicio").empty();
+                document.getElementById("tabla-resultados-reporte").style.display = 'none';
+                document.getElementById('spinner-reporte').style.display = 'block';
+
+                var cl = document.getElementById('cliente_reporte').value;
+
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function(){
+                    if (xhr.readyState == 4) {
+                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+                            //console.log(xhr.responseText)
+                            var data = JSON.parse(xhr.responseText)
+
+                            if (data.length > 0) {
+                                for(var i = 0; i < data.length; i ++) {
+                                    $("#body-resultados-reporte-cliente").append("<tr>");
+                                    $("#body-resultados-reporte-cliente").append("<td style='text-align:center;'>"+ data[i].Username + "</td>");
+                                    $("#body-resultados-reporte-cliente").append("<td style='text-align:center;'>"+ data[i].Documento + "</td>");
+                                    $("#body-resultados-reporte-cliente").append("<td style='text-align:center;'>"+ data[i].Nombre + "</td>");
+                                    $("#body-resultados-reporte-cliente").append("<td style='text-align:center;'>"+ data[i].Apellido + "</td>");
+                                    $("#body-resultados-reporte-cliente").append("<td style='text-align:center;'>"+ data[i].Password + "</td>");
+                                    $("#body-resultados-reporte-cliente").append("</tr>");
+                                }
+                            }
+                            document.getElementById("tabla-resultados-reporte").style.display = 'block';
+                            document.getElementById('spinner-reporte').style.display = 'none';
+                        } else {
+                            alert("Request was unsuccessful: " + xhr.status + "|" + xhr.responseText);
+                            //console.log("Request was unsuccessful: " + xhr.status)
+                        }
+                    }
+
+                }
+                xhr.open('GET', '/ejecutaReporteCliente?' + cl, true);
+                xhr.send(null);
+            }
+
+            function ejecutaReporteCuentas(){
+
+                //document.getElementById('spinner-carga-cuenta').style.display = 'block';
+                $("#body-resultados-reporte").empty();
+                document.getElementById("tabla-resultados-reporte").style.display = 'none';
+                document.getElementById('spinner-reporte').style.display = 'block';
+
+                var cl = document.getElementById('cliente_reporte').value;
+
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function(){
+                    if (xhr.readyState == 4) {
+                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+                            //console.log(xhr.responseText)
+                            var data = JSON.parse(xhr.responseText)
+
+                            if (data.length > 0) {
+                                for(var i = 0; i < data.length; i ++) {
+                                    $("#body-resultados-reporte-cuenta").append("<tr>");
+                                    $("#body-resultados-reporte-cuenta").append("<td style='text-align:left;padding-left: 15px;'>"+ data[i].Banco + "</td>");
+                                    $("#body-resultados-reporte-cuenta").append("<td style='text-align:center;'>"+ data[i].Tipo_Cuenta + "</td>");
+                                    $("#body-resultados-reporte-cuenta").append("<td style='text-align:center;'>"+ data[i].Numero_Cuenta + "</td>");
+                                    $("#body-resultados-reporte-cuenta").append("<td style='text-align:center;'>"+ data[i].Saldo.toFixed(2) + "</td>");
+                                    $("#body-resultados-reporte-cuenta").append("</tr>");
+                                }
+                            }
+                            document.getElementById("tabla-resultados-reporte").style.display = 'block';
+                            document.getElementById('spinner-reporte').style.display = 'none';
+                        } else {
+                            alert("Request was unsuccessful: " + xhr.status + "|" + xhr.responseText);
+                            //console.log("Request was unsuccessful: " + xhr.status)
+                        }
+                    }
+
+                }
+                xhr.open('GET', '/ejecutaReporteCuentas?' + cl, true);
+                xhr.send(null);
+            }
+
+            function ejecutaReporteServicios(){
+
+                //document.getElementById('spinner-carga-cuenta').style.display = 'block';
+                $("#body-resultados-reporte").empty();
+                document.getElementById("tabla-resultados-reporte").style.display = 'none';
+                document.getElementById('spinner-reporte').style.display = 'block';
+
+                var cl = document.getElementById('cliente_reporte').value;
+
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function(){
+                    if (xhr.readyState == 4) {
+                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+                            //console.log(xhr.responseText)
+                            var data = JSON.parse(xhr.responseText)
+
+                            if (data.length > 0) {
+                                for(var i = 0; i < data.length; i ++) {
+                                    $("#body-resultados-reporte-servicio").append("<tr>");
+                                    $("#body-resultados-reporte-servicio").append("<td style='text-align:left;padding-left: 15px;'>"+ data[i].Servicio + "</td>");
+                                    $("#body-resultados-reporte-servicio").append("<td style='text-align:center;'>"+ data[i].Imp_Servicio.toFixed(2) + "</td>");
+                                    $("#body-resultados-reporte-servicio").append("</tr>");
+                                }
+                            }
+                            document.getElementById("tabla-resultados-reporte").style.display = 'block';
+                            document.getElementById('spinner-reporte').style.display = 'none';
+                        } else {
+                            alert("Request was unsuccessful: " + xhr.status + "|" + xhr.responseText);
+                            //console.log("Request was unsuccessful: " + xhr.status)
+                        }
+                    }
+
+                }
+                xhr.open('GET', '/ejecutaReporteServicios?' + cl, true);
+                xhr.send(null);
+            }
+
+            function buscaSaldoActual(){
+
+                //document.getElementById('spinner-carga-cuenta').style.display = 'block';
+                document.getElementById('spinner-saldo-actual').style.display = 'block';
+
+                var cu = document.getElementById('cuenta_alta_movimiento').value;
+
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function(){
+                    if (xhr.readyState == 4) {
+                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+                            //console.log(xhr.responseText)
+                            var data = JSON.parse(xhr.responseText)
+
+                            document.getElementById('saldo_actual').value = data.toFixed(2);
+                            document.getElementById('spinner-saldo-actual').style.display = 'none';
+                        } else {
+                            alert("Request was unsuccessful: " + xhr.status + "|" + xhr.responseText);
+                            //console.log("Request was unsuccessful: " + xhr.status)
+                        }
+                    }
+
+                }
+
+                xhr.open('GET', '/saldoActual?' + cu, true);
+                xhr.send(null);
+            }
+
+
+            function buscaCuentasPorCliente(spinner, combo_hijo, combo_padre){
+
+                //document.getElementById('spinner-carga-cuenta').style.display = 'block';
+                document.getElementById(spinner).style.display = 'block';
+
+                //$("#cuenta_baja").empty();
+                $("#" + combo_hijo).empty();
+                //var cl = document.getElementById('cliente_baja_cuenta').value;
+                var cl = document.getElementById(combo_padre).value;
+
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function(){
+                    if (xhr.readyState == 4) {
+                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+                            //console.log(xhr.responseText)
+                            var data = JSON.parse(xhr.responseText)
+
+                            if (data.length == 0) {
+                                //$("#cuenta_baja").append("<option disabled hidden selected>... ooops! No hay Cuentas.</option>");
+                                $("#" + combo_hijo).append("<option disabled hidden selected>... ooops! No hay Cuentas.</option>");
+                            } else {
+                                //$("#cuenta_baja").append("<option disabled hidden selected>... de esta lista de opciones</option>");
+                                $("#" + combo_hijo).append("<option disabled hidden selected>... de esta lista de opciones</option>");
+                                for(var i = 0; i < data.length; i ++) {
+                                    //$("#cuenta_baja").append("<option>"+ data[i].Cuenta + "</option>");
+                                    $("#" + combo_hijo).append("<option>"+ data[i].Cuenta + "</option>");
+                                }
+                            }
+                            //document.getElementById('spinner-carga-cuenta').style.display = 'none';
+                            document.getElementById(spinner).style.display = 'none';
+                        } else {
+                            alert("Request was unsuccessful: " + xhr.status + "|" + xhr.responseText);
+                            //console.log("Request was unsuccessful: " + xhr.status)
+                        }
+                    }
+
+                }
+
+                xhr.open('GET', '/cuentasPorCliente?' + cl, true);
+                xhr.send(null);
+            }
+
+            function buscaServiciosPorCliente(spinner, combo_hijo, combo_padre){
+
+                //document.getElementById('spinner-carga-cuenta').style.display = 'block';
+                document.getElementById(spinner).style.display = 'block';
+
+                //$("#cuenta_baja").empty();
+                $("#" + combo_hijo).empty();
+                //var cl = document.getElementById('cliente_baja_cuenta').value;
+                var cu = document.getElementById(combo_padre).value;
+
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function(){
+                    if (xhr.readyState == 4) {
+                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+                            //console.log(xhr.responseText)
+                            var data = JSON.parse(xhr.responseText)
+
+                            if (data.length == 0) {
+                                //$("#cuenta_baja").append("<option disabled hidden selected>... ooops! No hay Cuentas.</option>");
+                                $("#" + combo_hijo).append("<option disabled hidden selected>... ooops! No hay Servicios.</option>");
+                            } else {
+                                //$("#cuenta_baja").append("<option disabled hidden selected>... de esta lista de opciones</option>");
+                                $("#" + combo_hijo).append("<option disabled hidden selected>... de esta lista de opciones</option>");
+                                for(var i = 0; i < data.length; i ++) {
+                                    //$("#cuenta_baja").append("<option>"+ data[i].Cuenta + "</option>");
+                                    $("#" + combo_hijo).append("<option>"+ data[i].Servicio + "</option>");
+                                }
+                            }
+                            //document.getElementById('spinner-carga-cuenta').style.display = 'none';
+                            document.getElementById(spinner).style.display = 'none';
+                        } else {
+                            alert("Request was unsuccessful: " + xhr.status + "|" + xhr.responseText);
+                            //console.log("Request was unsuccessful: " + xhr.status)
+                        }
+                    }
+
+                }
+
+                xhr.open('GET', '/serviciosPorCliente?' + cu, true);
+                xhr.send(null);
+            }
+
+
+            function validaCuenta(){
+
+                var cu = document.getElementById('numero_cuenta').value;
+                var ba = document.getElementById('banco').value;
+                var tc = document.getElementById('tipo_cuenta').value;
+
+                //alert('cu: '+ cu + '   ba: ' + ba + '   tc: '+ tc );
+
+                if(tc == "Seleccione un Tipo de Cuenta" || ba == "Seleccione un Banco" || cu == ""){
+                    return false;
+                }
+
+                $('#botonAltaCuenta').prop('disabled', true);
+
+                document.getElementById('text-cuenta-existente').style.display = "none";
+                document.getElementById('text-cuenta-disponible').style.display = "none";
+                document.getElementById('spinner-cuenta').style.display = "block";
+
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function(){
+                    if (xhr.readyState == 4) {
+                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+                            //console.log(xhr.responseText)
+                            var data = JSON.parse(xhr.responseText)
+                            document.getElementById('spinner-cuenta').style.display = "none";
+
+                            if (data > 0){
+                                document.getElementById('text-cuenta-existente').style.display = "block";
+                                document.getElementById('text-cuenta-disponible').style.display = "none";
+                                document.getElementById('numero-cuenta').focus();
+                            } else {
+                                document.getElementById('text-cuenta-existente').style.display = "none";
+                                document.getElementById('text-cuenta-disponible').style.display = "block";
+                                $('#botonAltaCuenta').prop('disabled', false);
+                            }
+                            //for(var i = 0; i < data.length; i ++) {
+                            //    str += "<div>name: " + data[i].name + "</div><div>price: " + data[i].price + "</div>"
+                            //}
+                        } else {
+                            alert("Request was unsuccessful: " + xhr.status + "|" + xhr.responseText);
+                            //console.log("Request was unsuccessful: " + xhr.status)
+                        }
+                    }
+
+                }
+
+                xhr.open('GET', '/validaCuenta?' + cu + '?'+ ba + '?'+ tc, true);
+                xhr.send(null);
+
+            }
+
+
+            function validaServicio(){
+
+                var cl = document.getElementById('cliente_alta_servicio').value;
+                var se = document.getElementById('nombre_servicio').value;
+
+                /*
+                if(cl == "... de esta lista de opciones" || cl == "... ooops! No hay Clientes." || se == ""){
+
+                    document.getElementById('text-servicio-existente').style.display = "none";
+                    document.getElementById('text-servicio-disponible').style.display = "none";
+                    document.getElementById('spinner-servicio').style.display = "none";
+                    return false;
+                }
+                */
+
+                $('#botonAltaServicio').prop('disabled', true);
+
+                document.getElementById('text-servicio-existente').style.display = "none";
+                document.getElementById('text-servicio-disponible').style.display = "none";
+                document.getElementById('spinner-servicio').style.display = "block";
+
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function(){
+                    if (xhr.readyState == 4) {
+                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+                            //console.log(xhr.responseText)
+                            var data = JSON.parse(xhr.responseText)
+                            document.getElementById('spinner-servicio').style.display = "none";
+
+                            if (data > 0){
+                                document.getElementById('text-servicio-existente').style.display = "block";
+                                document.getElementById('text-servicio-disponible').style.display = "none";
+                                document.getElementById('numero-servicio').focus();
+                            } else {
+                                document.getElementById('text-servicio-existente').style.display = "none";
+                                document.getElementById('text-servicio-disponible').style.display = "block";
+                                $('#botonAltaServicio').prop('disabled', false);
+                            }
+                            //for(var i = 0; i < data.length; i ++) {
+                            //    str += "<div>name: " + data[i].name + "</div><div>price: " + data[i].price + "</div>"
+                            //}
+                        } else {
+                            alert("Request was unsuccessful: " + xhr.status + "|" + xhr.responseText);
+                            //console.log("Request was unsuccessful: " + xhr.status)
+                        }
+                    }
+
+                }
+
+                xhr.open('GET', '/validaServicio?' + cl + '?'+ se, true);
+                xhr.send(null);
+
+            }
+
+            function validaUsuario(str){
+
+                $('#botonAltaCliente').prop('disabled', true);
+
+                if(str.length == 0){
+
+                    document.getElementById('text-user-existente').style.display = "none";
+                    document.getElementById('text-user-disponible').style.display = "none";
+                    document.getElementById('spinner-username').style.display = "none";
+
+                } else {
+
+                    document.getElementById('text-user-existente').style.display = "none";
+                    document.getElementById('text-user-disponible').style.display = "none";
+                    document.getElementById('spinner-username').style.display = "block";
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function(){
+                        if (xhr.readyState == 4) {
+                            if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+                                //console.log(xhr.responseText)
+                                var data = JSON.parse(xhr.responseText)
+                                document.getElementById('spinner-username').style.display = "none";
+
+                                if (data > 0){
+                                    document.getElementById('text-user-existente').style.display = "block";
+                                    document.getElementById('text-user-disponible').style.display = "none";
+                                    document.getElementById('username').focus();
+                                } else {
+                                    document.getElementById('text-user-existente').style.display = "none";
+                                    document.getElementById('text-user-disponible').style.display = "block";
+                                    $('#botonAltaCliente').prop('disabled', false);
+                                }
+                                //for(var i = 0; i < data.length; i ++) {
+                                //    str += "<div>name: " + data[i].name + "</div><div>price: " + data[i].price + "</div>"
+                                //}
+                            } else {
+                                alert("Request was unsuccessful: " + xhr.status + "|" + xhr.responseText);
+                                //console.log("Request was unsuccessful: " + xhr.status)
+                            }
+                        }
+                    }
+                    xhr.open('GET', '/validaUsuario?' + str, true);
+                    xhr.send(null);
+                }
+            }
+
+            function validaDocumento(str){
+
+                $('#botonAltaCliente').prop('disabled', true);
+
+                if(str.length == 0){
+
+                    document.getElementById('text-documento-existente').style.display = "none";
+                    document.getElementById('text-documento-disponible').style.display = "none";
+                    document.getElementById('spinner-documento').style.display = "none";
+
+                } else {
+
+                    document.getElementById('text-documento-existente').style.display = "none";
+                    document.getElementById('text-documento-disponible').style.display = "none";
+                    document.getElementById('spinner-documento').style.display = "block";
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function(){
+                        if (xhr.readyState == 4) {
+                            if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+                                //console.log(xhr.responseText)
+                                var data = JSON.parse(xhr.responseText)
+                                document.getElementById('spinner-documento').style.display = "none";
+
+                                if (data > 0){
+                                    document.getElementById('text-documento-existente').style.display = "block";
+                                    document.getElementById('text-documento-disponible').style.display = "none";
+                                    document.getElementById('documento').focus();
+                                } else {
+                                    document.getElementById('text-documento-existente').style.display = "none";
+                                    document.getElementById('text-documento-disponible').style.display = "block";
+                                    $('#botonAltaCliente').prop('disabled', false);
+                                }
+                                //for(var i = 0; i < data.length; i ++) {
+                                //    str += "<div>name: " + data[i].name + "</div><div>price: " + data[i].price + "</div>"
+                                //}
+                            } else {
+                                alert("Request was unsuccessful: " + xhr.status + "|" + xhr.responseText);
+                                //console.log("Request was unsuccessful: " + xhr.status)
+                            }
+                        }
+                    }
+                    xhr.open('GET', '/validaDocumento?' + str, true);
+                    xhr.send(null);
+                }
+            }
+
+
+            function showClientes(){
+                var ma = document.getElementById('div-Principal');
+                var cl = document.getElementById('div-Clientes');
+                var cu = document.getElementById('div-Cuentas');
+                var mo = document.getElementById('div-Movimientos');
+                var se = document.getElementById('div-Servicios');
+                var re = document.getElementById('div-Reporte');
+                ma.style.display = "none";
+                cl.style.display = "block";
+                cu.style.display = "none";
+                mo.style.display = "none";
+                se.style.display = "none";
+                re.style.display = "none";
+            }
+
+            function showCuentas(){
+                var ma = document.getElementById('div-Principal');
+                var cl = document.getElementById('div-Clientes');
+                var cu = document.getElementById('div-Cuentas');
+                var mo = document.getElementById('div-Movimientos');
+                var se = document.getElementById('div-Servicios');
+                var re = document.getElementById('div-Reporte');
+                ma.style.display = "none";
+                cl.style.display = "none";
+                cu.style.display = "block";
+                mo.style.display = "none";
+                se.style.display = "none";
+                re.style.display = "none";
+            }
+
+            function showMovimientos(){
+                var ma = document.getElementById('div-Principal');
+                var cl = document.getElementById('div-Clientes');
+                var cu = document.getElementById('div-Cuentas');
+                var mo = document.getElementById('div-Movimientos');
+                var se = document.getElementById('div-Servicios');
+                var re = document.getElementById('div-Reporte');
+                ma.style.display = "none";
+                cl.style.display = "none";
+                cu.style.display = "none";
+                mo.style.display = "block";
+                se.style.display = "none";
+                re.style.display = "none";
+            }
+
+            function showServicios(){
+                var ma = document.getElementById('div-Principal');
+                var cl = document.getElementById('div-Clientes');
+                var cu = document.getElementById('div-Cuentas');
+                var mo = document.getElementById('div-Movimientos');
+                var se = document.getElementById('div-Servicios');
+                var re = document.getElementById('div-Reporte');
+                ma.style.display = "none";
+                cl.style.display = "none";
+                cu.style.display = "none";
+                mo.style.display = "none";
+                se.style.display = "block";
+                re.style.display = "none";
+            }
+
+
+            function showReporte(){
+                var ma = document.getElementById('div-Principal');
+                var cl = document.getElementById('div-Clientes');
+                var cu = document.getElementById('div-Cuentas');
+                var mo = document.getElementById('div-Movimientos');
+                var se = document.getElementById('div-Servicios');
+                var re = document.getElementById('div-Reporte');
+                ma.style.display = "none";
+                cl.style.display = "none";
+                cu.style.display = "none";
+                mo.style.display = "none";
+                se.style.display = "none";
+                re.style.display = "block";
+            }
+
+            function beforeSubmitAltaCliente() {
+                $('#botonAltaCliente').prop('disabled', true);
+                document.getElementById('spinner-alta-cliente').style.display = "block";
+            }
+
+            function beforeSubmitBajaCliente() {
+                document.getElementById('spinner-baja-cliente').style.visibility = "visible";
+            }
+
+            function beforeSubmitAltaCuenta() {
+                $('#botonAltaCuenta').prop('disabled', true);
+                document.getElementById('spinner-alta-cuenta').style.display = "block";
+            }
+
+            function beforeSubmitBajaCuenta() {
+                document.getElementById('spinner-baja-cuenta').style.visibility = "visible";
+            }
+
+            function beforeSubmitAltaServicio() {
+                $('#botonAltaServicio').prop('disabled', true);
+                document.getElementById('spinner-alta-servicio').style.display = "block";
+            }
+
+            function beforeSubmitBajaServicio() {
+                $('#botonBajaServicio').prop('disabled', true);
+                document.getElementById('spinner-baja-servicio').style.display = "block";
+            }
+
+            //Inhabilita Botones Alta
+            function inhabilitaBotonAltaCliente(){
+                $('#botonAltaCliente').prop('disabled', true);
+            }
+
+            function inhabilitaBotonAltaCuenta(){
+                $('#botonAltaCuenta').prop('disabled', true);
+            }
+
+            function inhabilitaBotonAltaServicio(){
+                $('#botonAltaServicio').prop('disabled', true);
+                document.getElementById('text-servicio-existente').style.display = "none";
+                document.getElementById('text-servicio-disponible').style.display = "none";
+            }
+
+            function inhabilitaBotonAltaMovimiento(){
+                document.getElementById('saldo_actual').value = 0;
+                $('#botonAltaMovimiento').prop('disabled', true);
+            }
+
+            //Habilta Botones Baja
+            function habilitaBotonBajaCliente(){
+                //$('#botonBajaCliente').prop('disabled', false);
+                $('#abre-modal-baja-clientes').prop('disabled', false);
+            }
+
+            function habilitaBotonBajaCuenta(){
+                //$('#botonBajaCuenta').prop('disabled', false);
+                $('#abre-modal-baja-cuentas').prop('disabled', false);
+            }
+
+            function habilitaBotonBajaServicio(){
+                $('#botonBajaServicio').prop('disabled', false);
+            }
+
+            //Inhabilta Botones Baja
+            function inhabilitaBotonBajaCuenta(){
+                $('#botonBajaCuenta').prop('disabled', true);
+            }
+
+            function inhabilitaBotonBajaServicio(){
+                $('#botonBajaServicio').prop('disabled', true);
+            }
+
+            function habilitaBotonReporte(){
+                $('#botonReporte').prop('disabled', false);
+            }
+
+            function habilitaBotonAltaMovimiento(){
+
+                var cl = document.getElementById('cliente_alta_movimiento').value;
+                var cu = document.getElementById('cuenta_alta_movimiento').value;
+                var im = document.getElementById('importe_movimiento').value;
+
+                if(   cu == "... de esta lista de opciones" || cu == "... ooops! No hay Cuentas."
+                   || im == 0){
+                    $('#botonAltaMovimiento').prop('disabled', true);
+                } else {
+                    $('#botonAltaMovimiento').prop('disabled', false);
+                }
+
+            }
+
+            function limpiaComboCuentas(){
+                $("#cuenta_baja").empty();
+            }
+
+            function limpiaComboServicios(){
+                $("#servicio_baja_servicio").empty();
+            }
+
+            function limpiaCampoServicio(){
+                document.getElementById("nombre_servicio").value= "";
+                document.getElementById("text-servicio-existente").style.display = "none";
+                document.getElementById("text-servicio-disponible").style.display = "none";
+            }
+
+    	  </script>
+
+        <style media="screen">
+
+            form
+            {
+                width: 350px;
+            }
+
+            table
+            {
+                border-collapse: collapse;
+            }
+
+            .spinner-border
+            {
+                display: none;
+            }
+
+            #text-user-existente,
+            #text-user-disponible,
+            #text-documento-existente,
+            #text-documento-disponible,
+            #text-cuenta-existente,
+            #text-cuenta-disponible,
+            #text-servicio-existente,
+            #text-servicio-disponible
+            {
+                display: none;
+            }
+
+        </style>
+
+  	</head>
+  	<body>
+
+        <nav class="navbar navbar-expand-sm" style="background-color: RGB(180,180,180);"> <!--  bg-secondary navbar-dark-->
+            <!-- Brand -->
+            <a class="navbar-brand" href="https://www.belltech.la/" target="_blank">
+                <img src="/images/Belltech-Logo.png" alt="Logo de Belltech" style="width:100px;">
+            </a>
+            <a class="navbar-brand" href="https://developer.nuance.com/public/index.php?task=mix" target="_blank">
+                <img src="/images/Mix-Logo.png" alt="Logo de Nuance-Mix" style="width:100px;">
+            </a>
+
+            <!-- Links -->
+            <ul class="navbar-nav">
+                <!-- Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown" style="font-size: 20px; color: RGB(0,0,0);">
+                        <strong>Menú Principal</strong>
+                    </a>
+                    <div class="dropdown-menu">
+                        <table>
+                            <tbody>
+                                <tr class="dropdown-item" style="padding-left:1em;" onclick="showClientes()">
+                                    <td style="width:2em;text-align: center;">
+                                        <i class="fas fa-user-check" style="font-size: 20px; left: 0px"></i>
+                                    </td>
+                                    <td>
+                                        <span style="padding-left:0.5em;">Clientes</span>
+                                    </td>
+                                </tr>
+                                <tr class="dropdown-item" style="padding-left:1em;" onclick="showCuentas()">
+                                    <td style="width:2em;text-align: center;">
+                                        <i class="fas fa-hand-holding-usd" style="font-size: 20px; left: 0px;"></i>
+                                    </td>
+                                    <td>
+                                        <span style="padding-left:0.5em;">Cuentas</span>
+                                    </td>
+                                </tr>
+                                <tr class="dropdown-item" style="padding-left:1em;" onclick="showServicios()">
+                                    <td style="width:2em;text-align: center;">
+                                        <i class="fas fa-umbrella" style="font-size: 20px; left: 0px;"></i>
+                                    </td>
+                                    <td>
+                                        <span style="padding-left:0.5em;">Servicios</span>
+                                    </td>
+                                </tr>
+                                <tr class="dropdown-item" style="padding-left:1em;" onclick="showMovimientos()">
+                                    <td style="width:2em;text-align: center;">
+                                        <i class="fas fa-money-bill-wave" style="font-size: 20px; left: 0px;"></i>
+                                    </td>
+                                    <td>
+                                        <span style="padding-left:0.5em;">Movimientos</span>
+                                    </td>
+                                </tr>
+                                <tr class="dropdown-item" style="padding-left:1em;" onclick="showReporte()">
+                                    <td style="width:2em;text-align: center;">
+                                        <i class="far fa-file-alt" style="font-size: 20px; left: 0px;"></i>
+                                    </td>
+                                    <td>
+                                        <span style="padding-left:0.5em;">Reporte</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" onclick="showClientes()"><i class="fas fa-user-check" style="font-size: 20px;"></i> &nbsp; Clientes</a>
+                        <a class="dropdown-item" href="#" onclick="showCuentas()"><i class="fas fa-hand-holding-usd" style="font-size: 20px;"></i> &nbsp;&nbsp; Cuentas</a>
+                        <a class="dropdown-item" href="#" onclick="showServicios()"><i class="fas fa-umbrella" style="font-size: 20px;"></i> &nbsp;&nbsp; Servicios</a>
+                        <a class="dropdown-item" href="#" onclick="showMovimientos()"><i class="fas fa-money-bill-wave" style="font-size: 20px;"></i> &nbsp; Movimientos</a>
+                        <a class="dropdown-item" href="#" onclick="showReporte()"><i class="far fa-file-alt" style="font-size: 20px;"></i> &nbsp;&nbsp;&nbsp; Reporte</a>
+                    </div-->
+                </li>
+            </ul>
+        </nav>
+
+        <div id="div-Principal" style="background-color: RGB(225,225,225); display: block;">
+          <div style="padding: 15px;">
+              <h5 style="padding-left: 15px;" ><i>Landing Page - CRM para la POC de Nuance-Mix</i> </h5>
+              <hr>
+              <div class="row">
+                  <div class="col-sm-4">
+                      <h6 style="padding-left: 15px;">En el Menú deplegable de la barra superior, podrá elegir opciones para administrar la información de:</h6>
+                      <div class="row">
+                          <div class="cell" style="vertical-align: middle; padding-left: 45px;">
+                              <ul class="fa-ul">
+                                  <li><i class="fa-li fas fa-user-check" style="font-size: 20px;"></i> &nbsp; Clientes</li>
+                                  <li><i class="fa-li fas fa-hand-holding-usd" style="font-size: 20px;"></i> &nbsp; Cuentas</li>
+                                  <li><i class="fa-li fas fa-umbrella" style="font-size: 20px;"></i> &nbsp; Servicios</li>
+                                  <li><i class="fa-li fas fa-money-bill-wave" style="font-size: 20px;"></i> &nbsp; Movimientos</li>
+                              </ul>
+                          </div>
+                      </div>
+                      <h6 style="padding-left: 15px;">Y tambien podrá obtener detalles de la información existente, en la Sección:</h6>
+                      <div class="row">
+                          <div class="cell" style="vertical-align: middle; padding-left: 45px;">
+                              <ul class="fa-ul">
+                                  <li><i class="fa-li far fa-file-alt" style="font-size: 20px;"></i> &nbsp; Reporte</li>
+                              </ul>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-sm-8">
+                      <h6 style="padding-left: 30px;">El Modelo es simple:</h6>
+                      <img style="padding-left: 30px;width:500px;" src="/images/Modelo.png" alt="Modelo de Operacion" >
+                  </div>
+              </div>
+              <hr>
+              <h5 style="padding-left: 15px;font-family:courier;" ><strong>&lt; Mensajes del Sistema &gt;</strong></h5>
+              <h6 style="padding-left: 35px;font-family:courier;" ><i>$MensajeDeLaPagina</i></h6>
+          </div>
+        </div>
+
+        <div id="div-Clientes" style="display: none;">
+
+            <h5 style="background-color: RGB(190,225,225);border: 15px solid RGB(190,225,225);"><strong><i class="fas fa-user-check" style="font-size: 20px;"></i> &nbsp; Gestión de Clientes</strong></h5>
+
+            <div style="padding-left: 15px; float:left; width: 30%;">
+                <form name="clientes_alta" method="POST" action="/clienteInserta" onsubmit="beforeSubmitAltaCliente()">
+                    <h5>Alta de Clientes</h5>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <label>Nombre de Usuario:</label>
+                                <input type="text" class="form-control" maxlength="50" placeholder="Ingrese un Username" name="username" id="username" required onblur="validaUsuario(this.value)" oninput="inhabilitaBotonAltaCliente()">
+                            </div>
+                            <div class="col-sm-4">
+                                <span class="spinner-border text-primary mx-left" style="width: 1.75rem;height: 1.75rem;margin-left: -4px;margin-top: 36px;margin-bottom: 0px;border-left-width: 6px;border-top-width: 6px;border-right-width: 6px;border-bottom-width: 6px;" name="spinner-username" id="spinner-username"></span>
+                                <p style="font-size: 1rem; margin-top: 2.25rem; margin-bottom: 0px; margin-left: -1rem;" name="text-user-existente" id="text-user-existente"><kbd style="background-color: red;">Ya existe</kbd></p>
+                                <p style="font-size: 1rem; margin-top: 2.25rem; margin-bottom: 0px; margin-left: -1rem;"
+                                 name="text-user-disponible" id="text-user-disponible"><kbd style="background-color: green;">Disponible</kbd></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <label>Documento [DNI]:</label>
+                                <input type="text" class="form-control" maxlength="50" placeholder="Ingrese el DNI" name="documento" id="documento" required onblur="validaDocumento(this.value)" oninput="inhabilitaBotonAltaCliente()" required>
+                            </div>
+                            <div class="col-sm-4">
+                                <span class="spinner-border text-primary mx-left" style="width: 1.75rem;height: 1.75rem;margin-left: -4px;margin-top: 36px;margin-bottom: 0px;border-left-width: 6px;border-top-width: 6px;border-right-width: 6px;border-bottom-width: 6px;" name="spinner-documento" id="spinner-documento"></span>
+                                <p style="font-size: 1rem; margin-top: 2.25rem; margin-bottom: 0px; margin-left: -1rem;" name="text-documento-existente" id="text-documento-existente"><kbd style="background-color: red;">Ya existe</kbd></p>
+                                <p style="font-size: 1rem; margin-top: 2.25rem; margin-bottom: 0px; margin-left: -1rem;" name="text-documento-disponible" id="text-documento-disponible"><kbd style="background-color: green;">Disponible</kbd></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre:</label>
+                        <input type="text" class="form-control" maxlength="250" placeholder="Ingrese el Nombre del Cliente" name="nombre" id="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Apellido:</label>
+                        <input type="text" class="form-control" maxlength="250" placeholder="Ingrese el Apellido del Cliente" name="apellido" id="apellido" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Clave Simulada:</label>
+                        <input type="text" class="form-control" maxlength="250" placeholder="Ingrese una Clave" name="clave" id="clave" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <button type="submit" class="btn btn-primary" id="botonAltaCliente" name="botonAltaCliente" disabled>Enviar</button>
+                        </div>
+                        <div class="col-sm-10">
+                            <span class="spinner-border text-primary mx-left" style="width: 1.75rem;height: 1.75rem;margin-left: 16px;margin-top: 6px;margin-bottom: 0px;border-left-width: 6px;border-top-width: 6px;border-right-width: 6px;border-bottom-width: 6px;" name="spinner-alta-cliente" id="spinner-alta-cliente"></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div style="padding-left: 15px; float:right; width: 60%;">
+                <form name="clientes_baja" method="POST" action="/clienteBaja" onsubmit="return beforeSubmitBajaCliente()">
+                    <h5>Baja de Clientes</h5>
+                    <div class="form-group">
+                        <label for="cliente_baja">Seleccione el Cliente...</label>
+                        <select class="form-control" id="cliente_baja" name="cliente_baja" oninput="habilitaBotonBajaCliente()">
+                            $Clientes
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" id="abre-modal-baja-clientes" name="abre-modal-baja-clientes" class="btn btn-primary mx-left" data-toggle="modal" data-target="#modalBajaCliente" disabled>
+                            Enviar
+                        </button>
+                    </div>
+                    <!-- The Modal -->
+                    <div class="modal fade" id="modalBajaCliente">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <!-- Modal Header -->
+                                <div class="modal-header" style="background-color: RGB(190,225,225);">
+                                    <h5 class="modal-title">Confirmación de Baja de Cliente</h5>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                    <p>Si elimina el Cliente, eliminara tambien todas las Cuentas y los Servicios asociados.</p>
+                                    <p>Desea continuar?</p>
+                                </div>
+
+                                <!-- Modal footer -->
+                                <!--div class="modal-footer" style="background-color: RGB(190,225,225);"-->
+                                <div class="row" style="background-color: RGB(190,225,225); margin:0px;padding: 1rem;">
+                                    <div class="col-sm-4" style="padding-right:0px;padding-left:30px;">
+                                        <button type="submit" class="btn btn-primary" style="width:120px;" >Si, adelante!</button>
+                                    </div>
+                                    <div class="col-sm-3" style="padding-left:0px;">
+                                        <span class="spinner-border text-primary" style="width: 1.75rem;height: 1.75rem;margin-left: 4px;margin-top: 6px;margin-bottom: 0px;border-left-width: 6px;border-top-width: 6px;border-right-width: 6px;border-bottom-width: 6px; display:block; visibility:hidden;" name="spinner-baja-cliente" id="spinner-baja-cliente"></span>
+                                    </div>
+                                    <div class="col-sm-5" style="padding-left:90px;">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Atras</button>
+                                    </div>
+                                </div>
+                                <!--/div-->
+
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <div id="div-Cuentas" style="background-color: RGB(165,251,167); display: none;">
+
+            <h5 style="background-color: RGB(165,251,167);border: 15px solid RGB(165,251,167);"><strong><i class="fas fa-hand-holding-usd" style="font-size: 20px;"></i> &nbsp; Gestión de Cuentas</strong></h5>
+
+                <div style="padding-left: 15px; float:left; width: 30%;">
+                    <form name="cuentas_alta" method="POST" action="/cuentaInserta" onsubmit="beforeSubmitAltaCuenta()">
+                        <h5>Alta de Cuentas</h5>
+                        <div class="form-group">
+                            <label for="cliente_alta_cuenta">Seleccione el Cliente...</label>
+                            <select class="form-control" id="cliente_alta_cuenta" name="cliente_alta_cuenta" required>
+                                $Clientes
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="banco">Banco</label>
+                            <select class="form-control" id="banco" name="banco" oninput="validaCuenta()" required>
+                                <option disabled hidden selected>Seleccione un Banco</option>
+                                <option>Banco Industrial</option>
+                                <option>BBVA</option>
+                                <option>Ciudad</option>
+                                <option>HSBC</option>
+                                <option>Macro</option>
+                                <option>Nacion</option>
+                                <option>Santander Rio</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo_cuenta">Tipo de Cuenta</label>
+                            <select class="form-control" id="tipo_cuenta" name="tipo_cuenta" oninput="validaCuenta()" required>
+                                <option disabled hidden selected>Seleccione un Tipo de Cuenta</option>
+                                <option>Caja Ahorro</option>
+                                <option>Cuenta Corriente</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-8" style="padding-right:0px;">
+                                    <label>Número de Cuenta:</label>
+                                    <input type="text" class="form-control" maxlength="50" placeholder="Ingrese la Cuenta" name="numero_cuenta" id="numero_cuenta" onblur="validaCuenta()" required>
+                                </div>
+                                <div class="col-sm-4">
+                                    <span class="spinner-border text-success mx-left" style="width: 1.75rem;height: 1.75rem;padding-left: 0px; margin-left: 0px;margin-top: 36px;margin-bottom: 0px;border-left-width: 6px;border-top-width: 6px;border-right-width: 6px;border-bottom-width: 6px;" name="spinner-cuenta" id="spinner-cuenta"></span>
+                                    <p style="font-size: 1rem; margin-top: 2.25rem; margin-bottom: 0px; margin-left: 0rem;" name="text-cuenta-existente" id="text-cuenta-existente"><kbd style="background-color: red;">Ya existe</kbd></p>
+                                    <p style="font-size: 1rem; margin-top: 2.25rem; margin-bottom: 0px; margin-left: 0rem;" name="text-cuenta-disponible" id="text-cuenta-disponible"><kbd style="background-color: green;">Disponible</kbd></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <button type="submit" class="btn btn-success" id="botonAltaCuenta" name="botonAltaCuenta" disabled>Enviar</button>
+                            </div>
+                            <div class="col-sm-10">
+                                <span class="spinner-border text-success mx-left" style="width: 1.75rem;height: 1.75rem;margin-left: 16px;margin-top: 6px;margin-bottom: 0px;border-left-width: 6px;border-top-width: 6px;border-right-width: 6px;border-bottom-width: 6px;" name="spinner-alta-cuenta" id="spinner-alta-cuenta"></span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div style="padding-left: 15px; float:right; width: 60%;">
+                    <form name="cuentas_baja" method="POST" action="/cuentaBaja" onsubmit="return beforeSubmitBajaCuenta()">
+                        <h5>Baja de Cuentas</h5>
+                        <div class="form-group">
+                            <label for="cliente_baja_cuenta">Seleccione el Cliente...</label>
+                            <select class="form-control" id="cliente_baja_cuenta" name="cliente_baja_cuenta" oninput="buscaCuentasPorCliente('spinner-carga-cuenta', 'cuenta_baja', 'cliente_baja_cuenta'); limpiaComboCuentas();inhabilitaBotonBajaCuenta();">
+                                $Clientes
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <label for="cuenta_baja">Seleccione la Cuenta...</label>
+                                    <select class="form-control" id="cuenta_baja" name="cuenta_baja" oninput="habilitaBotonBajaCuenta()">
+                                        <!--$Cuentas-->
+                                    </select>
+                                </div>
+                                <div class="col-sm-2" style="padding-left: 0px; padding-right: 0px;">
+                                    <span class="spinner-border text-success mx-left" style="width: 1.75rem;height: 1.75rem;margin-left: 0px;margin-top: 36px;margin-bottom: 0px;border-left-width: 6px;border-top-width: 6px;border-right-width: 6px;border-bottom-width: 6px;" name="spinner-carga-cuenta" id="spinner-carga-cuenta"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" id="abre-modal-baja-cuentas" name="abre-modal-baja-cuentas" class="btn btn-success mx-left" data-toggle="modal" data-target="#modalBajaCuenta" disabled>
+                                Enviar
+                            </button>
+                        </div>
+                        <!-- The Modal -->
+                        <div class="modal fade" id="modalBajaCuenta">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+
+                                    <!-- Modal Header -->
+                                    <div class="modal-header" style="background-color: RGB(165,251,167);">
+                                        <h5 class="modal-title">Confirmación de Baja de Cuenta</h5>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        <p>Si elimina la Cuenta, eliminara tambien todos los Servicios asociados.</p>
+                                        <p>Desea continuar?</p>
+                                    </div>
+
+                                    <!-- Modal footer -->
+                                    <!--div class="modal-footer" style="background-color: RGB(165,251,167);"-->
+                                    <div class="row" style="background-color: RGB(165,251,167); margin:0px;padding: 1rem;">
+                                        <div class="col-sm-4" style="padding-right:0px;padding-left:30px;">
+                                            <button type="submit" class="btn btn-success" style="width:120px;" >Si, adelante!</button>
+                                        </div>
+                                        <div class="col-sm-3" style="padding-left:0px;">
+                                            <span class="spinner-border text-success" style="width: 1.75rem;height: 1.75rem;margin-left: 4px;margin-top: 6px;margin-bottom: 0px;border-left-width: 6px;border-top-width: 6px;border-right-width: 6px;border-bottom-width: 6px; display:block; visibility:hidden;" name="spinner-baja-cuenta" id="spinner-baja-cuenta"></span>
+                                        </div>
+                                        <div class="col-sm-5" style="padding-left:90px;">
+                                            <button type="button" class="btn btn-success" data-dismiss="modal">Atras</button>
+                                        </div>
+                                    </div>
+                                    <!--/div-->
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="div-Servicios" style="background-color: RGB(247,249,167); display: none;">
+
+            <h5 style="background-color: RGB(247,249,167);border: 15px solid RGB(247,249,167);"><strong><i class="fas fa-umbrella" style="font-size: 20px;"></i> &nbsp; Gestión de Servicios</strong></h5>
+
+            <div style="padding-left: 15px; float:left; width: 30%;">
+                <form name="servicios_alta" method="POST" action="/servicioInserta" onsubmit="beforeSubmitAltaServicio()">
+                    <h5>Alta de Servicios</h5>
+                    <div class="form-group">
+                        <label for="cliente_alta_servicio">Seleccione el Cliente...</label>
+                        <select class="form-control" id="cliente_alta_servicio" name="cliente_alta_servicio" oninput="limpiaCampoServicio()" required>
+                            $Clientes
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-8" style="padding-right: 0px;">
+                                <label>Nombre del Servicio:</label>
+                                <input type="text" class="form-control" maxlength="250" placeholder="Ingrese el Servicio" name="nombre_servicio" id="nombre_servicio" onblur="validaServicio()" required>
+                            </div>
+                            <div class="col-sm-4">
+                                <span class="spinner-border text-warning mx-left" style="width: 1.75rem;height: 1.75rem;margin-left: 0px;margin-top: 36px;margin-bottom: 0px;border-left-width: 6px;border-top-width: 6px;border-right-width: 6px;border-bottom-width: 6px;" name="spinner-servicio" id="spinner-servicio"></span>
+                                <p style="font-size: 1rem; margin-top: 2.25rem; margin-bottom: 0px; margin-left: 0rem;" name="text-servicio-existente" id="text-servicio-existente"><kbd style="background-color: red;">Ya existe</kbd></p>
+                                <p style="font-size: 1rem; margin-top: 2.25rem; margin-bottom: 0px; margin-left: 0rem;" name="text-servicio-disponible" id="text-servicio-disponible"><kbd style="background-color: green;">Disponible</kbd></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Importe:</label>
+                        <input type="number" class="form-control" placeholder="Digite el Importe" name="importe" id="importe" min="0" step="0.01" max="100000" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <button type="submit" class="btn btn-warning" id="botonAltaServicio" name="botonAltaServicio" onclick="" disabled>Enviar</button>
+                        </div>
+                        <div class="col-sm-10">
+                            <span class="spinner-border text-warning mx-left" style="width: 1.75rem;height: 1.75rem;margin-left: 16px;margin-top: 6px;margin-bottom: 0px;border-left-width: 6px;border-top-width: 6px;border-right-width: 6px;border-bottom-width: 6px;" name="spinner-alta-servicio" id="spinner-alta-servicio"></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div style="padding-left: 15px; float:right; width: 60%;">
+                <form name="servicio_baja" method="POST" action="/servicioBaja" onsubmit="beforeSubmitBajaServicio()">
+                    <h5>Baja de Servicios</h5>
+                    <div class="form-group">
+                        <label for="cliente_baja_cuenta">Seleccione el Cliente...</label>
+                        <select class="form-control" id="cliente_baja_servicio" name="cliente_baja_servicio"  oninput="buscaServiciosPorCliente('spinner-carga-servicio-baja-servicio', 'servicio_baja_servicio', 'cliente_baja_servicio'); limpiaComboServicios();inhabilitaBotonBajaServicio();">
+                            $Clientes
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <label for="cuenta_baja">Seleccione el Servicio...</label>
+                                <select class="form-control" id="servicio_baja_servicio" name="servicio_baja_servicio" oninput="habilitaBotonBajaServicio()">
+                                    <!--$CuentasParaBajaCuenta-->
+                                </select>
+                            </div>
+                            <div class="col-sm-2" style="padding-left: 0px; padding-right: 0px;">
+                                <span class="spinner-border text-warning mx-left" style="width: 1.75rem;height: 1.75rem;margin-left: 0px;margin-top: 36px;margin-bottom: 0px;border-left-width: 6px;border-top-width: 6px;border-right-width: 6px;border-bottom-width: 6px;" name="spinner-carga-servicio-baja-servicio" id="spinner-carga-servicio-baja-servicio"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <button type="submit" class="btn btn-warning mx-left" id="botonBajaServicio" name="botonBajaServicio" disabled>Enviar</button>
+                            </div>
+                            <div class="col-sm-10">
+                                <span class="spinner-border text-warning mx-left" style="width: 1.75rem;height: 1.75rem;margin-left: 16px;margin-top: 6px;margin-bottom: 0px;border-left-width: 6px;border-top-width: 6px;border-right-width: 6px;border-bottom-width: 6px;" name="spinner-baja-servicio" id="spinner-baja-servicio"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+
+        <div id="div-Movimientos" style="background-color: RGB(255,161,161); display: none;">
+
+            <h5 style="background-color: RGB(255,161,161);border: 15px solid RGB(255,161,161);"><strong><i class="fas fa-money-bill-wave" style="font-size: 20px;"></i> &nbsp; Gestión de Movimientos</strong></h5>
+
+            <div style="padding-left: 15px; float:left; width: 30%;">
+                <form name="movimientos_alta" method="POST" action="/movimientoInserta" onsubmit="beforeSubmitAltaServicio()">
+                    <h5>Ingreso de Movimiento</h5>
+                    <div class="form-group">
+                        <label for="cliente_alta_movimiento">Seleccione el Cliente...</label>
+                        <select class="form-control" id="cliente_alta_movimiento" name="cliente_alta_movimiento" required oninput="buscaCuentasPorCliente('spinner-carga-cuenta-alta-movimiento', 'cuenta_alta_movimiento', 'cliente_alta_movimiento'); inhabilitaBotonAltaMovimiento()">
+                            $Clientes
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <label for="cuenta_alta_movimiento">Seleccione la Cuenta...</label>
+                                <select class="form-control" id="cuenta_alta_movimiento" name="cuenta_alta_movimiento" oninput="buscaSaldoActual();habilitaBotonAltaMovimiento();">
+                                    <!--$Cuentas-->
+                                </select>
+                            </div>
+                            <div class="col-sm-2" style="padding-left: 0px; padding-right: 0px;">
+                                <span class="spinner-border text-danger mx-left" style="width: 1.75rem;height: 1.75rem;margin-left: 0px;margin-top: 36px;margin-bottom: 0px;border-left-width: 6px;border-top-width: 6px;border-right-width: 6px;border-bottom-width: 6px;" name="spinner-carga-cuenta-alta-movimiento" id="spinner-carga-cuenta-alta-movimiento"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-8" style="padding-right: 0px;">
+                                <label>Saldo Actual:</label>
+                                <input type="text" class="form-control" name="saldo_actual" id="saldo_actual" disabled required>
+                            </div>
+                            <div class="col-sm-4">
+                                <span class="spinner-border text-danger mx-left" style="width: 1.75rem;height: 1.75rem;margin-left: 0px;margin-top: 36px;margin-bottom: 0px;border-left-width: 6px;border-top-width: 6px;border-right-width: 6px;border-bottom-width: 6px;" name="spinner-saldo-actual" id="spinner-saldo-actual"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Importe a Ingresar:</label>
+                        <input type="number" class="form-control" placeholder="Digite el Importe" name="importe_movimiento" id="importe_movimiento" min="0" step="0.01" max="100000" required onblur="habilitaBotonAltaMovimiento()">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <button type="submit" class="btn btn-danger" id="botonAltaMovimiento" name="botonAltaMovimiento" disabled>Enviar</button>
+                        </div>
+                        <div class="col-sm-10">
+                            <span class="spinner-border text-danger mx-left" style="width: 1.75rem;height: 1.75rem;margin-left: 16px;margin-top: 6px;margin-bottom: 0px;border-left-width: 6px;border-top-width: 6px;border-right-width: 6px;border-bottom-width: 6px;" name="spinner-alta-movimiento" id="spinner-alta-movimiento"></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+
+        <div id="div-Reporte" style="display: none; margin-bottom:50px;">
+
+            <h5 style="background-color: RGB(217,217,217);border: 15px solid RGB(217,217,217);"><strong><i class="far fa-file-alt" style="font-size: 20px;"></i> &nbsp; Reporte</strong></h5>
+
+            <div style="padding-left: 15px; float:left; width: 30%;">
+                <!--form name="reporte" method="POST" action="/ejecutaReporte" onsubmit="beforeSubmitReporte()"-->
+                <h5>Cuentas y Servicios por Cliente</h5>
+                <div class="form-group">
+                    <label for="cliente_reporte">Para visualizar los Datos, seleccione el Cliente...</label>
+                    <select class="form-control" id="cliente_reporte" name="cliente_reporte" required oninput="habilitaBotonReporte()">
+                        $Clientes
+                    </select>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-2">
+                        <button type="submit" class="btn btn-secondary" id="botonReporte" name="botonReporte" onclick="ejecutaReporteCliente();ejecutaReporteCuentas();ejecutaReporteServicios()" disabled>Ver</button>
+                    </div>
+                    <div class="col-sm-10">
+                        <span class="spinner-border text-secondary mx-left" style="width: 1.75rem;height: 1.75rem;margin-left: 0px;margin-top: 6px;margin-bottom: 0px;border-left-width: 6px;border-top-width: 6px;border-right-width: 6px;border-bottom-width: 6px;" name="spinner-reporte" id="spinner-reporte"></span>
+                    </div>
+                </div>
+                <br>
+                <!--/form-->
+            </div>
+            <div style="display: none; padding-left: 15px;width: 60%;" id="tabla-resultados-reporte" name="tabla-resultados-reporte">
+                <table style="border: 1px solid black; width: 100%;">
+                    <thead>
+                        <tr>
+                            <td style="text-align:center;background: RGB(190,225,225); border-bottom: 1px solid black;" colspan="5"><strong>Datos del Cliente</strong></td>
+                        </tr>
+                        <tr>
+                            <td style='text-align:center;background: RGB(190,225,225); border-bottom: 1px solid black;'><strong>Username</strong></td>
+                            <td style='text-align:center;background: RGB(190,225,225); border-bottom: 1px solid black;'><strong>Documento</strong></td>
+                            <td style='text-align:center;background: RGB(190,225,225); border-bottom: 1px solid black;'><strong>Nombre</strong></td>
+                            <td style='text-align:center;background: RGB(190,225,225); border-bottom: 1px solid black;'><strong>Apellido</strong></td>
+                            <td style='text-align:center;background: RGB(190,225,225); border-bottom: 1px solid black;'><strong>Clave para Operar</strong></td>
+                        </tr>
+                    </thead>
+                    <tbody id="body-resultados-reporte-cliente" name="body-resultados-reporte-cliente">
+                    </tbody>
+                </table>
+                <br>
+                <table style="border: 1px solid black; width: 100%;">
+                    <thead>
+                        <tr>
+                            <td style="text-align:center;background: RGB(165,251,167); border-bottom: 1px solid black; border-left: 1px solid black;" colspan="4"><strong>Datos de las Cuentas</strong></td>
+                        </tr>
+                        <tr>
+                            <td style='text-align:center;background: RGB(165,251,167); border-bottom: 1px solid black; border-left: 1px solid black;'><strong>Banco</strong></td>
+                            <td style='text-align:center;background: RGB(165,251,167); border-bottom: 1px solid black;'><strong>Tipo Cuenta</strong></td>
+                            <td style='text-align:center;background: RGB(165,251,167); border-bottom: 1px solid black;'><strong>Nro. Cuenta</strong></td>
+                            <td style='text-align:center;background: RGB(165,251,167); border-bottom: 1px solid black;'><strong>Saldo</strong></td>
+                        </tr>
+                    </thead>
+                    <tbody id="body-resultados-reporte-cuenta" name="body-resultados-reporte-cuenta">
+                    </tbody>
+                </table>
+                <br>
+                <table style="border: 1px solid black; width: 100%;">
+                    <thead>
+                        <tr>
+                            <td style="text-align:center;background: RGB(247,249,167); border-bottom: 1px solid black; border-left: 1px solid black;" colspan="2"><strong>Datos de los Servicios</strong></td>
+                        </tr>
+                        <tr>
+                            <td style='text-align:center;background: RGB(247,249,167); border-bottom: 1px solid black; border-left: 1px solid black;'><strong>Servicio</strong></td>
+                            <td style='text-align:center;background: RGB(247,249,167); border-bottom: 1px solid black;'><strong>Imp. Servicio</strong></td>
+                        </tr>
+                    </thead>
+                    <tbody id="body-resultados-reporte-servicio" name="body-resultados-reporte-servicio">
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+  	</body>
+
+</html>
