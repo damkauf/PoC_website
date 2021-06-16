@@ -203,7 +203,7 @@ app.post('/clienteInserta', function(req,res){
    var apellido = req.body.apellido;
    apellido = apellido.split("%20").join(" ");
    var clave = req.body.clave;
-   clave = apellido.split("%20").join(" ");
+   clave = clave.split("%20").join(" ");
 
    console.log('[' + libUtils.getDateTime() + '] | ' + 'index.js [clienteInserta] | Ingreso... ');
    var promise = libInsertarCliente.clienteInserta(username,documento,nombre,apellido,clave);
