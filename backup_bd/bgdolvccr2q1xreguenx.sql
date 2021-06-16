@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: bgdolvccr2q1xreguenx-mysql.services.clever-cloud.com:3306
--- Generation Time: Jun 16, 2021 at 12:54 AM
+-- Generation Time: Jun 16, 2021 at 06:51 PM
 -- Server version: 8.0.22-13
 -- PHP Version: 7.2.34
 
@@ -224,16 +224,17 @@ CREATE DEFINER=`udkuqopqwafai3il`@`%` PROCEDURE `servicioElimina` (IN `servicio`
    		WHERE Customer.Username = usuario);
 END$$
 
-CREATE DEFINER=`udkuqopqwafai3il`@`%` PROCEDURE `servicioInserta` (IN `servicio` VARCHAR(50), IN `usuario` VARCHAR(50), IN `importe` DECIMAL(10,2))  BEGIN
+CREATE DEFINER=`udkuqopqwafai3il`@`%` PROCEDURE `servicioInserta` (IN `servicio` VARCHAR(50), IN `cuenta` VARCHAR(50), IN `usuario` VARCHAR(50), IN `importe` DECIMAL(10,2))  BEGIN
 DECLARE IDPersona INT;
    SELECT PersonID INTO IDPersona FROM Customer WHERE Customer.Username = usuario; 
-   INSERT INTO Services VALUES (IDPersona, NULL, servicio, importe, CURRENT_TIMESTAMP());
+   INSERT INTO Services VALUES (IDPersona, NULL, cuenta, servicio, importe, CURRENT_TIMESTAMP());
 END$$
 
 CREATE DEFINER=`udkuqopqwafai3il`@`%` PROCEDURE `servicioReporte` (IN `usuario` VARCHAR(50))  READS SQL DATA
 BEGIN
 SELECT
 	Services.ServiceName AS Servicio,
+    Services.AccountServices AS Cuenta_Servicio,
     Services.PayAccount AS Imp_Servicio
 FROM Customer
 	INNER JOIN Services ON Customer.PersonID = Services.PersonID    
@@ -248,6 +249,16 @@ BEGIN
         ON Services.PersonID = Customer.PersonID
    WHERE Customer.Username = usuario
    ORDER BY ServiceName, PayAccount ASC;
+END$$
+
+CREATE DEFINER=`udkuqopqwafai3il`@`%` PROCEDURE `servicioValidaCodigoExistente` (IN `codigo` VARCHAR(250), OUT `salida` INT)  BEGIN
+DECLARE VarInter INT;
+SET VarInter = 0;
+SELECT DISTINCT COUNT(*) as Qty INTO VarInter 
+FROM Services 
+WHERE codigo = Services.AccountServices;
+SET @salida = VarInter;
+SELECT @salida AS Salida FROM DUAL;
 END$$
 
 CREATE DEFINER=`udkuqopqwafai3il`@`%` PROCEDURE `servicioValidaExistente` (IN `servicio` VARCHAR(250), IN `usuario` VARCHAR(50), OUT `salida` INT)  BEGIN
@@ -281,9 +292,7 @@ CREATE TABLE `Account` (
 --
 
 INSERT INTO `Account` (`PersonID`, `AccountID`, `AccountNumber`, `BankName`, `AccountType`) VALUES
-(188, 49, '123123123123', 'Ciudad', 'Caja Ahorro'),
-(189, 50, '123', 'Banco Industrial', 'Caja Ahorro'),
-(189, 51, '345345345354', 'Santander Rio', 'Cuenta Corriente');
+(193, 53, '1234567891011121314', 'Macro', 'Caja Ahorro');
 
 -- --------------------------------------------------------
 
@@ -303,9 +312,7 @@ CREATE TABLE `AccountMove` (
 --
 
 INSERT INTO `AccountMove` (`AccountID`, `AccountBalance`, `PreviousBalance`, `LastDate`) VALUES
-('49', '34.50', '0.00', '2021-06-15 21:43:40'),
-('50', '5647.88', '0.00', '2021-06-16 00:44:55'),
-('51', '3213.74', '0.00', '2021-06-16 00:45:20');
+('53', '20000.00', '0.00', '2021-06-16 16:03:43');
 
 -- --------------------------------------------------------
 
@@ -327,12 +334,8 @@ CREATE TABLE `Customer` (
 --
 
 INSERT INTO `Customer` (`PersonID`, `Username`, `Documento`, `Firstname`, `Lastname`, `Password`) VALUES
-(184, 'DamianK', '24646457', 'Damian', 'Kaufmann', ''),
-(185, 'eosuna', '95889904', 'Ervin', 'Osuna', ''),
-(186, 'alejofont', '94400396', 'Alejandro', 'Font', ''),
-(187, 'Anajulia', '94555666', 'Ana Julia', 'Hernandez', ''),
-(188, 'Test-Modelo', '1010101010', 'Test', 'Modelo', ''),
-(189, 'Test2', '1122334455', 'Test2', 'Test2', 'Test2');
+(192, 'testhoy', '1122336677', 'Test', 'hoy', 'clavehoy'),
+(193, 'eosuna', '95889904', 'Ervin', 'Osuna', '1234');
 
 -- --------------------------------------------------------
 
@@ -343,6 +346,7 @@ INSERT INTO `Customer` (`PersonID`, `Username`, `Documento`, `Firstname`, `Lastn
 CREATE TABLE `Services` (
   `PersonID` int NOT NULL,
   `ServicesID` int NOT NULL,
+  `AccountServices` varchar(50) NOT NULL,
   `ServiceName` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `PayAccount` decimal(10,2) NOT NULL,
   `LastDate` datetime DEFAULT NULL
@@ -352,9 +356,10 @@ CREATE TABLE `Services` (
 -- Dumping data for table `Services`
 --
 
-INSERT INTO `Services` (`PersonID`, `ServicesID`, `ServiceName`, `PayAccount`, `LastDate`) VALUES
-(189, 37, 'Aguas Argentinas', '987.00', '2021-06-16 00:45:34'),
-(189, 38, 'ABL', '2342.00', '2021-06-16 00:46:09');
+INSERT INTO `Services` (`PersonID`, `ServicesID`, `AccountServices`, `ServiceName`, `PayAccount`, `LastDate`) VALUES
+(193, 39, '', 'SUBE', '100.00', '2021-06-16 16:04:11'),
+(192, 40, '123456', 'ETB', '1231.00', '2021-06-16 18:32:14'),
+(192, 41, '1234567', 'ETBA', '1234.00', '2021-06-16 18:46:44');
 
 --
 -- Indexes for dumped tables
@@ -390,19 +395,19 @@ ALTER TABLE `Services`
 -- AUTO_INCREMENT for table `Account`
 --
 ALTER TABLE `Account`
-  MODIFY `AccountID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `AccountID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `Customer`
 --
 ALTER TABLE `Customer`
-  MODIFY `PersonID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=190;
+  MODIFY `PersonID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=194;
 
 --
 -- AUTO_INCREMENT for table `Services`
 --
 ALTER TABLE `Services`
-  MODIFY `ServicesID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `ServicesID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- Constraints for dumped tables

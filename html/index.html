@@ -128,6 +128,7 @@
                                 for(var i = 0; i < data.length; i ++) {
                                     $("#body-resultados-reporte-servicio").append("<tr>");
                                     $("#body-resultados-reporte-servicio").append("<td style='text-align:left;padding-left: 15px;'>"+ data[i].Servicio + "</td>");
+                                    $("#body-resultados-reporte-servicio").append("<td style='text-align:center;'>"+ data[i].Cuenta_Servicio + "</td>");
                                     $("#body-resultados-reporte-servicio").append("<td style='text-align:center;'>"+ data[i].Imp_Servicio.toFixed(2) + "</td>");
                                     $("#body-resultados-reporte-servicio").append("</tr>");
                                 }
@@ -316,6 +317,12 @@
                 var cl = document.getElementById('cliente_alta_servicio').value;
                 var se = document.getElementById('nombre_servicio').value;
 
+                if(cl.length == 0 || se.length == 0){
+                    document.getElementById('text-servicio-existente').style.display = "none";
+                    document.getElementById('text-servicio-disponible').style.display = "none";
+                    document.getElementById('spinner-servicio').style.display = "none";
+                    return false;
+                }
                 /*
                 if(cl == "... de esta lista de opciones" || cl == "... ooops! No hay Clientes." || se == ""){
 
@@ -364,6 +371,54 @@
                 xhr.send(null);
 
             }
+
+            function validaCodigoServicio(){
+
+                var co = document.getElementById('codigo_servicio').value;
+
+                if(co.length == 0){
+                    document.getElementById('text-cod-servicio-existente').style.display = "none";
+                    document.getElementById('text-cod-servicio-disponible').style.display = "none";
+                    document.getElementById('spinner-cod-servicio').style.display = "none";
+                    return false;
+                }
+
+                $('#botonAltaServicio').prop('disabled', true);
+
+                document.getElementById('text-cod-servicio-existente').style.display = "none";
+                document.getElementById('text-cod-servicio-disponible').style.display = "none";
+                document.getElementById('spinner-cod-servicio').style.display = "block";
+
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function(){
+                    if (xhr.readyState == 4) {
+                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+                            //console.log(xhr.responseText)
+                            var data = JSON.parse(xhr.responseText)
+                            document.getElementById('spinner-cod-servicio').style.display = "none";
+
+                            if (data > 0){
+                                document.getElementById('text-cod-servicio-existente').style.display = "block";
+                                document.getElementById('text-cod-servicio-disponible').style.display = "none";
+                                document.getElementById('codigo-servicio').focus();
+                            } else {
+                                document.getElementById('text-cod-servicio-existente').style.display = "none";
+                                document.getElementById('text-cod-servicio-disponible').style.display = "block";
+                                $('#botonAltaServicio').prop('disabled', false);
+                            }
+                        } else {
+                            alert("Request was unsuccessful: " + xhr.status + "|" + xhr.responseText);
+                            //console.log("Request was unsuccessful: " + xhr.status)
+                        }
+                    }
+
+                }
+
+                xhr.open('GET', '/validaCodigoServicio?' + co, true);
+                xhr.send(null);
+
+            }
+
 
             function validaUsuario(str){
 
@@ -577,6 +632,8 @@
                 $('#botonAltaServicio').prop('disabled', true);
                 document.getElementById('text-servicio-existente').style.display = "none";
                 document.getElementById('text-servicio-disponible').style.display = "none";
+                document.getElementById('text-cod-servicio-existente').style.display = "none";
+                document.getElementById('text-cod-servicio-disponible').style.display = "none";
             }
 
             function inhabilitaBotonAltaMovimiento(){
@@ -637,8 +694,11 @@
 
             function limpiaCampoServicio(){
                 document.getElementById("nombre_servicio").value= "";
+                document.getElementById("codigo_servicio").value= "";
                 document.getElementById("text-servicio-existente").style.display = "none";
                 document.getElementById("text-servicio-disponible").style.display = "none";
+                document.getElementById("text-cod-servicio-existente").style.display = "none";
+                document.getElementById("text-cod-servicio-disponible").style.display = "none";
             }
 
     	  </script>
@@ -667,7 +727,9 @@
             #text-cuenta-existente,
             #text-cuenta-disponible,
             #text-servicio-existente,
-            #text-servicio-disponible
+            #text-servicio-disponible,
+            #text-cod-servicio-existente,
+            #text-cod-servicio-disponible
             {
                 display: none;
             }
@@ -1048,6 +1110,19 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-8" style="padding-right: 0px;">
+                                <label>Tarjeta/Codigo/Cuenta asociada:</label>
+                                <input type="text" class="form-control" maxlength="250" placeholder="Ingrese la Tarjeta/Codigo/Cuenta" name="codigo_servicio" id="codigo_servicio" onblur="validaCodigoServicio()">
+                            </div>
+                            <div class="col-sm-4">
+                                <span class="spinner-border text-warning mx-left" style="width: 1.75rem;height: 1.75rem;margin-left: 0px;margin-top: 36px;margin-bottom: 0px;border-left-width: 6px;border-top-width: 6px;border-right-width: 6px;border-bottom-width: 6px;" name="spinner-cod-servicio" id="spinner-cod-servicio"></span>
+                                <p style="font-size: 1rem; margin-top: 2.25rem; margin-bottom: 0px; margin-left: 0rem;" name="text-cod-servicio-existente" id="text-cod-servicio-existente"><kbd style="background-color: red;">Ya existe</kbd></p>
+                                <p style="font-size: 1rem; margin-top: 2.25rem; margin-bottom: 0px; margin-left: 0rem;" name="text-cod-servicio-disponible" id="text-cod-servicio-disponible"><kbd style="background-color: green;">Disponible</kbd></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label>Importe:</label>
                         <input type="number" class="form-control" placeholder="Digite el Importe" name="importe" id="importe" min="0" step="0.01" max="100000" required>
                     </div>
@@ -1216,10 +1291,11 @@
                 <table style="border: 1px solid black; width: 100%;">
                     <thead>
                         <tr>
-                            <td style="text-align:center;background: RGB(247,249,167); border-bottom: 1px solid black; border-left: 1px solid black;" colspan="2"><strong>Datos de los Servicios</strong></td>
+                            <td style="text-align:center;background: RGB(247,249,167); border-bottom: 1px solid black; border-left: 1px solid black;" colspan="3"><strong>Datos de los Servicios</strong></td>
                         </tr>
                         <tr>
                             <td style='text-align:center;background: RGB(247,249,167); border-bottom: 1px solid black; border-left: 1px solid black;'><strong>Servicio</strong></td>
+                            <td style='text-align:center;background: RGB(247,249,167); border-bottom: 1px solid black;'><strong>Cuenta Servicio</strong></td>
                             <td style='text-align:center;background: RGB(247,249,167); border-bottom: 1px solid black;'><strong>Imp. Servicio</strong></td>
                         </tr>
                     </thead>

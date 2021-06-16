@@ -292,19 +292,20 @@ app.post('/cuentaInserta', function(req,res){
 app.post('/servicioInserta', function(req,res){
 
     var servicio = req.body.nombre_servicio.split("%20").join(" ");
+    var codigo = req.body.codigo_servicio.split("%20").join(" ");
     var cliente_completo = req.body.cliente_alta_servicio.split("%20").join(" ");
     var importe = req.body.importe;
 
     var usuario = cliente_completo.split(' - ')[0];
 
     console.log('[' + libUtils.getDateTime() + '] | ' + 'index.js [servicioInserta] | Ingreso... ');
-    var promise = libInsertarServicio.servicioInserta(servicio,usuario,importe);
+    var promise = libInsertarServicio.servicioInserta(servicio,codigo,usuario,importe);
     console.log('[' + libUtils.getDateTime() + '] | ' + 'index.js [servicioInserta] | ... Se genero Promesa...');
 
     promise
     .then(function(re){
         console.log('[' + libUtils.getDateTime() + '] | index.js [servicioInserta] | ... evaluando Promesa');
-        console.log('[' + libUtils.getDateTime() + '] | ' + `index.js [servicioInserta] | Se inserto la Cuenta: '${servicio}','${usuario}',${importe}`);
+        console.log('[' + libUtils.getDateTime() + '] | ' + `index.js [servicioInserta] | Se inserto la Cuenta: '${servicio}','${codigo}','${usuario}',${importe}`);
         console.log('[' + libUtils.getDateTime() + '] | index.js [servicioInserta] | Se procede a evaluar Seleccion Clientes... ');
         return libSeleccionarCliente.clienteSelecciona();
     })
@@ -488,6 +489,35 @@ app.get('/validaServicio', function(req, res) {
     })
 
 })
+
+app.get('/validaCodigoServicio', function(req, res) {
+
+   var http = require('http')
+   var url = require('url');
+
+   var reqUrl = req.url;
+   var servicio = reqUrl.split('?')[1].split("%20").join(" ");
+
+   console.log('[' + libUtils.getDateTime() + '] | ' + 'index.js [validaCodigoServicio] | Servicio: ' + servicio + "'");
+   console.log('[' + libUtils.getDateTime() + '] | ' + 'index.js [validaCodigoServicio] | Ingreso... ');
+   var promise = libInsertarServicio.validaCodigoServicio(servicio);
+   console.log('[' + libUtils.getDateTime() + '] | ' + 'index.js [validaCodigoServicio] | ... Se genero Promesa...');
+
+   promise
+   .then(function(re){
+        console.log('[' + libUtils.getDateTime() + '] | index.js [validaCodigoServicio] | ... evaluando Promesa');
+        console.log('[' + libUtils.getDateTime() + '] | ' + 'index.js [validaCodigoServicio] | Variable: ' + re[0][0].Salida + "'");
+
+        res.end(JSON.stringify(re[0][0].Salida));
+
+        return;
+    })
+    .catch(function(err){
+         console.log(err);
+    })
+
+})
+
 
 
 app.get('/cuentasPorCliente', function(req, res) {
