@@ -1,8 +1,8 @@
 let conn = {
-  host    : 'bgdolvccr2q1xreguenx-mysql.services.clever-cloud.com',
-  user    : 'udkuqopqwafai3il',
-  password: 'qCicnyVNZC5DmMlBWVBJ',
-  database: 'bgdolvccr2q1xreguenx'
+  host    : 'byj5jext6jc5auvfdlc6-mysql.services.clever-cloud.com',
+  user    : 'uducoflfxe4zdz0b',
+  password: 'KghIAP1PhDPyN4KmXnVM',
+  database: 'byj5jext6jc5auvfdlc6'
 };
 
 module.exports = conn;
