@@ -16,7 +16,7 @@ function clienteSeleccionaSQL(retorno) {
             if (error) {
                 reject (console.error(error.message));
             }
-            if(results.length>0) {
+            if(results.length > 0) {
                 console.log('[' + libUtils.getDateTime() + '] | clienteSeleccionaSQL.js [clienteSeleccionaSQL] | Posterior a Seleccionar');
                 //console.log('[' + libUtils.getDateTime() + '] | clienteSeleccionaSQL.js [clienteSeleccionaSQL] | RESULTS begin -----------------------');
                 //console.log(...results);
