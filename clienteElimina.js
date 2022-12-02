@@ -9,7 +9,7 @@ function clienteElimina(username) {
 
         console.log('[' + libUtils.getDateTime() + '] | ' + `clienteElimina.js | Previo a Eliminar: '${username}'`);
 
-        let sql = `CALL clienteElimina('${username}')`;
+        let sql = `CALL clienteElimina('${username}')`; 
 
         connection.query(sql, [true], (error, results) => {
             connection.end();
